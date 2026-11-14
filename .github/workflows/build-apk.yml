@@ -38,6 +38,8 @@ jobs:
           sed -i "s/version '8.7.3'/version '8.13.0'/" build.gradle
           rm -rf app
           cp -a /tmp/aistudy10-v3/app .
+          cp android-overrides/MainActivity.java app/src/main/java/uz/akmal/aistudy10/MainActivity.java
+          cp android-overrides/content.js app/src/main/assets/aistudy/content.js
           sed -i 's/compileSdk 35/compileSdk 36/' app/build.gradle
           sed -i "/versionName '3.0.0-preview'/a\        ndk { abiFilters 'arm64-v8a' }" app/build.gradle
           sed -i 's/geckoview:160.0.20261104181552/geckoview:139.0.20250609112858/' app/build.gradle
