@@ -39,12 +39,13 @@ jobs:
           rm -rf app
           cp -a /tmp/aistudy10-v3/app .
           sed -i 's/compileSdk 35/compileSdk 36/' app/build.gradle
+          sed -i "/versionName '3.0.0-preview'/a\        ndk { abiFilters 'arm64-v8a' }" app/build.gradle
           sed -i 's/geckoview:160.0.20261104181552/geckoview:139.0.20250609112858/' app/build.gradle
       - name: Build installable debug APK
         run: gradle :app:assembleDebug --no-daemon
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
-          name: AiStudy10-Android10-APK
+          name: AiStudy10-Android10-APK-arm64
           path: app/build/outputs/apk/debug/app-debug.apk
           if-no-files-found: error
