@@ -39,7 +39,7 @@ jobs:
           rm -rf app
           cp -a /tmp/aistudy10-v3/app .
           sed -i 's/compileSdk 35/compileSdk 36/' app/build.gradle
-          sed -i 's/geckoview:160.0.20261104181552/geckoview:155.0.20260903215306/' app/build.gradle
+          sed -i 's/geckoview:160.0.20261104181552/geckoview:139.0.20250609112858/' app/build.gradle
       - name: Build installable debug APK
         run: gradle :app:assembleDebug --no-daemon
       - name: Upload APK
