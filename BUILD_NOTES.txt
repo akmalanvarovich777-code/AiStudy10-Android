@@ -1,0 +1,7 @@
+AIStudy Companion v1.0.0
+========================
+Android Studio source project (not a compiled APK).
+Main application: app/src/main/java/uz/aistudy/companion/MainActivity.java
+Build via Android Studio / GitHub Actions; see README.md.
+
+Read-only course progress viewer; does not forge course completion or auto-submit tests.
