@@ -35,6 +35,7 @@ public final class MainActivity extends Activity {
     private final GeckoView[] views=new GeckoView[10];
     private final String[] statuses=new String[10];
     private final Button[] profileButtons=new Button[10];
+    private Button solveButton;
     private GeckoRuntime runtime;
     private LinearLayout shell, toolbar, hiddenHost;
     private FrameLayout content;
