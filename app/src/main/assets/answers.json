@@ -1,0 +1,154 @@
+[
+  {
+    "question": "eng yaxshi tavsiflaydi",
+    "answer": "malumotlardan organishi mumkin"
+  },
+  {
+    "question": "real hayotiy qollanishi",
+    "answer": "yuqoridagilarning barchasi"
+  },
+  {
+    "question": "hayot siklining 2 ta bosqichi",
+    "answer": "orgatish va organish"
+  },
+  {
+    "question": "expert bolgan suniy intellekt tizimi",
+    "answer": "tor si"
+  },
+  {
+    "question": "3 ta yonalishni kichigidan kattasiga",
+    "answer": "chuqur organish mashinani organish"
+  },
+  {
+    "question": "tyuring testi nima",
+    "answer": "inson kabi oylay olishi"
+  },
+  {
+    "question": "generativ si suniy intellekt nima",
+    "answer": "yangi kontent yarata oladigan"
+  },
+  {
+    "question": "llm nimani anglatadi",
+    "answer": "katta til modeli"
+  },
+  {
+    "question": "chat botlar va qidiruv tizimlari ortasidagi",
+    "answer": "kontekstga etibor"
+  },
+  {
+    "question": "prompt nima",
+    "answer": "chat botga kiritadigan matn"
+  },
+  {
+    "question": "yaxshi promptni tuzishning",
+    "answer": "kontekst rol vazifa"
+  },
+  {
+    "question": "gallyutsinatsiyalar hallucinations nima",
+    "answer": "notogri javoblar"
+  },
+  {
+    "question": "prompt yozishda quyidagi yondashuvlardan",
+    "answer": "rol kontekst vazifa"
+  },
+  {
+    "question": "yaratilgan matnning asosiy cheklovlaridan",
+    "answer": "xatolar bolishi mumkin"
+  },
+  {
+    "question": "ohangini ozgartirish uchun nimani",
+    "answer": "ohang sozlamalari"
+  },
+  {
+    "question": "hr yollash jarayonlarida foydalanishning",
+    "answer": "tegishli tajribani ajratib olishi mumkin"
+  },
+  {
+    "question": "reklama grafikalarini yaratishda qaysi",
+    "answer": "yuqoridagilarning barchasi"
+  },
+  {
+    "question": "maxfiy hujjatlarni baham kormaslik",
+    "answer": "maxfiylik kafolatlari yoq"
+  },
+  {
+    "question": "ishga oid vazifalar uchun si dan",
+    "answer": "har doim tekshirib turing"
+  },
+  {
+    "question": "tasvir yaratish uchun qaysi",
+    "answer": "DALL-E / Midjourney / Stable Diffusion"
+  },
+  {
+    "question": "yaratish uchun qaysi sun'iy intellekt vositasi OpenAI tomonidan ishlab chiqilgan",
+    "answer": "DALL-E"
+  },
+  {
+    "question": "yordamida tasvirlarni yaratishda qaysi omil natijani sezilarli darajada",
+    "answer": "va tavsiflovchi promtlar"
+  },
+  {
+    "question": "foydalanib nimaga erishish mumkin",
+    "answer": "dasturiy ravishda"
+  },
+  {
+    "question": "intellekt yordamida musiqa yarata oladi",
+    "answer": "Suno"
+  },
+  {
+    "question": "oshirishga imkon beradigan asosiy funksiyasi qaysi",
+    "answer": "pscale tugmalari"
+  },
+  {
+    "question": "vositalaridan qaysi biri matndan video yaratish uchun ishlatiladi",
+    "answer": "Runway ML"
+  },
+  {
+    "question": "ushbu kursda si nima deb tariflangan",
+    "answer": "organadigan dasturiy taminot"
+  },
+  {
+    "question": "tor si narrow ai ga misol",
+    "answer": "yuqoridagilarning barchasi"
+  },
+  {
+    "question": "tyuring testining maqsadi nima",
+    "answer": "insonni ozini ham inson deb"
+  },
+  {
+    "question": "uyidagilardan qaysi biri mashhur generativ",
+    "answer": "ChatGPT"
+  },
+  {
+    "question": "zor prompt yaratish uchun asosiy",
+    "answer": "rol kontekst vazifa"
+  },
+  {
+    "question": "si dagi gallyutsinatsiya ga misol",
+    "answer": "notogri yoki uydirma"
+  },
+  {
+    "question": "lumotlarni tahlil qilish uchun qanday ishlatilishi mumkin",
+    "answer": "ganish va vizuallashtirish orqali"
+  },
+  {
+    "question": "microsoft office ilovalariga qaysi",
+    "answer": "copilot"
+  },
+  {
+    "question": "si va ish haqida qaysi fikr togri",
+    "answer": "samarali boladi"
+  },
+  {
+    "question": "tomonidan ishlab chiqilgan SI vositasi qaysi",
+    "answer": "DALL-E"
+  },
+  {
+    "question": "atndan video yaratish imkonini beruvchi",
+    "answer": "Runway ML"
+  },
+  {
+    "question": "midjourney tasvir yaratishni sozlashda",
+    "answer": "tomonlar nisbati"
+  }
+]
