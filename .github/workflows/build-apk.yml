@@ -42,6 +42,7 @@ jobs:
           cp android-overrides/content.js app/src/main/assets/aistudy/content.js
           sed -i 's/compileSdk 35/compileSdk 36/' app/build.gradle
           sed -i "/versionName '3.0.0-preview'/a\        ndk { abiFilters 'arm64-v8a' }" app/build.gradle
+          sed -i "s/versionCode 300/versionCode 301/; s/versionName '3.0.0-preview'/versionName '3.1.0'/" app/build.gradle
           sed -i 's/geckoview:160.0.20261104181552/geckoview:139.0.20250609112858/' app/build.gradle
       - name: Build installable debug APK
         run: gradle :app:assembleDebug --no-daemon

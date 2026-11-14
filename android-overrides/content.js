@@ -7,7 +7,7 @@
   if (location.hostname !== 'omp.aistudy.uz') return;
   const existing = window.__AIS_ANDROID;
   if (existing) { existing.configure(window.__AIS_ANDROID_OPTIONS || {}); return; }
-  const conf = Object.assign({rate:2,autoplay:true,autoNext:true,quizAssist:false,guessMissing:false,autoSubmit:false,autoCourse:true,replayMissing:true},window.__AIS_ANDROID_OPTIONS || {});
+  const conf = Object.assign({rate:3,autoplay:true,autoNext:true,autoStartTest:true,quizAssist:false,guessMissing:false,autoSubmit:false,autoCourse:true,replayMissing:true},window.__AIS_ANDROID_OPTIONS || {});
   const clean = x => String(x || '').normalize('NFKC').toLowerCase()
     .replace(/[’‘`ʼʻ'"“”_-]/g,'').replace(/[^\p{L}\p{N}\s]/gu,' ').replace(/\s+/g,' ').trim();
   const txt = el => String(el?.innerText || el?.textContent || '').replace(/\s+/g,' ').trim();
@@ -15,8 +15,9 @@
     if (!el?.getClientRects?.().length) return false;
     try {const s = getComputedStyle(el);return s.display!=='none' && s.visibility!=='hidden';}catch(_){return false;}
   };
-  let currentVideo=null, lastNext=0, lastQuizAction=0, lastStep='', wasOffline=false;
+  let currentVideo=null, lastNext=0, lastQuizAction=0, lastStep='', wasOffline=false, pendingVideoEnd=null;
   const handled=new WeakSet();
+  const startedTests=new WeakSet();
   const db=[{"question":"eng yaxshi tavsiflaydi","answer":"malumotlardan organishi mumkin"},{"question":"real hayotiy qollanishi","answer":"yuqoridagilarning barchasi"},{"question":"hayot siklining 2 ta bosqichi","answer":"orgatish va organish"},{"question":"expert bolgan suniy intellekt tizimi","answer":"tor si"},{"question":"3 ta yonalishni kichigidan kattasiga","answer":"chuqur organish mashinani organish"},{"question":"tyuring testi nima","answer":"inson kabi oylay olishi"},{"question":"generativ si suniy intellekt nima","answer":"yangi kontent yarata oladigan"},{"question":"llm nimani anglatadi","answer":"katta til modeli"},{"question":"chat botlar va qidiruv tizimlari ortasidagi","answer":"kontekstga etibor"},{"question":"prompt nima","answer":"chat botga kiritadigan matn"},{"question":"yaxshi promptni tuzishning","answer":"kontekst rol vazifa"},{"question":"gallyutsinatsiyalar hallucinations nima","answer":"notogri javoblar"},{"question":"prompt yozishda quyidagi yondashuvlardan","answer":"rol kontekst vazifa"},{"question":"yaratilgan matnning asosiy cheklovlaridan","answer":"xatolar bolishi mumkin"},{"question":"ohangini ozgartirish uchun nimani","answer":"ohang sozlamalari"},{"question":"hr yollash jarayonlarida foydalanishning","answer":"tegishli tajribani ajratib olishi mumkin"},{"question":"reklama grafikalarini yaratishda qaysi","answer":"yuqoridagilarning barchasi"},{"question":"maxfiy hujjatlarni baham kormaslik","answer":"maxfiylik kafolatlari yoq"},{"question":"ishga oid vazifalar uchun si dan","answer":"har doim tekshirib turing"},{"question":"tasvir yaratish uchun qaysi","answer":"DALL-E / Midjourney / Stable Diffusion"},{"question":"yaratish uchun qaysi sun'iy intellekt vositasi OpenAI tomonidan ishlab chiqilgan","answer":"DALL-E"},{"question":"yordamida tasvirlarni yaratishda qaysi omil natijani sezilarli darajada","answer":"va tavsiflovchi promtlar"},{"question":"foydalanib nimaga erishish mumkin","answer":"dasturiy ravishda"},{"question":"intellekt yordamida musiqa yarata oladi","answer":"Suno"},{"question":"oshirishga imkon beradigan asosiy funksiyasi qaysi","answer":"pscale tugmalari"},{"question":"vositalaridan qaysi biri matndan video yaratish uchun ishlatiladi","answer":"Runway ML"},{"question":"ushbu kursda si nima deb tariflangan","answer":"organadigan dasturiy taminot"},{"question":"tor si narrow ai ga misol","answer":"yuqoridagilarning barchasi"},{"question":"tyuring testining maqsadi nima","answer":"insonni ozini ham inson deb"},{"question":"uyidagilardan qaysi biri mashhur generativ","answer":"ChatGPT"},{"question":"zor prompt yaratish uchun asosiy","answer":"rol kontekst vazifa"},{"question":"si dagi gallyutsinatsiya ga misol","answer":"notogri yoki uydirma"},{"question":"lumotlarni tahlil qilish uchun qanday ishlatilishi mumkin","answer":"ganish va vizuallashtirish orqali"},{"question":"microsoft office ilovalariga qaysi","answer":"copilot"},{"question":"si va ish haqida qaysi fikr togri","answer":"samarali boladi"},{"question":"tomonidan ishlab chiqilgan SI vositasi qaysi","answer":"DALL-E"},{"question":"atndan video yaratish imkonini beruvchi","answer":"Runway ML"},{"question":"midjourney tasvir yaratishni sozlashda","answer":"tomonlar nisbati"}];
 
   function videoKey() {
@@ -59,7 +60,7 @@
     });
     video.addEventListener('ended',()=>{
       try{localStorage.removeItem(key);}catch(_){}
-      if(conf.autoNext) setTimeout(()=>advanceLesson(),1500);
+      if(conf.autoNext) pendingVideoEnd={at:Date.now(),key};
     });
     setSpeed(video);
     if(conf.autoplay)video.play().catch(()=>{});
@@ -139,12 +140,7 @@
     const rows=lessons(),active=rows.filter(row=>row.active);
     if(active.length!==1)return; // Don't guess when active lesson is ambiguous.
     const index=rows.indexOf(active[0]);
-    if(conf.replayMissing && index>0){
-      const missing=rows.slice(0,index).find(row=>!row.watched);
-      if(missing && clickRow(missing)){lastNext=Date.now();notify('Ko‘rilmagan dars qayta ochildi');return;}
-    }
-    let nextRow=null;
-    for(let i=index+1;i<rows.length;i++)if(!rows[i].watched){nextRow=rows[i];break;}
+    const nextRow=rows[index+1]||null;
     if(nextRow){if(clickRow(nextRow))lastNext=Date.now();return;}
     const test=findControl(/^(test|testga o.tish|yakuniy test|modul testi)$/i) ||
       [...document.querySelectorAll('div.cursor-pointer,li,[role="button"]')]
@@ -158,7 +154,7 @@
 
   function quiz() {
     if(!conf.quizAssist || Date.now()-lastQuizAction<1700 || !location.pathname.includes('/courses/'))return;
-    const start=findControl(/^(testni boshlash|sinovni boshlash|start test)$/i);
+    const start=findControl(/^(testni boshlash|sinovni boshlash|imtihonni boshlash|start test|start quiz)$/i);
     if(start){start.click();lastQuizAction=Date.now();return;}
     const boxes=[...document.querySelectorAll('section.px-4.py-5,div.px-4.py-5,[class*="py-5"],form')].filter(shown);
     let found=null;
@@ -194,6 +190,30 @@
     }
   }
 
+  function startTestIfPresent() {
+    if(!conf.autoStartTest || !location.pathname.includes('/courses/'))return;
+    const start=findControl(/^(testni boshlash|sinovni boshlash|imtihonni boshlash|start test|start quiz)$/i);
+    if(!start || startedTests.has(start))return;
+    try{start.scrollIntoView({block:'center'});start.click();startedTests.add(start);lastQuizAction=Date.now();notify('Testni boshlash bosildi');}catch(_){}
+  }
+
+  function confirmEndedVideo() {
+    if(!pendingVideoEnd || !conf.autoNext)return;
+    const rows=lessons(),active=rows.filter(row=>row.active);
+    if(active.length!==1)return;
+    // Wait for the site's own watched marker; never infer completion from the
+    // media ended event or write progress ourselves.
+    if(active[0].watched){
+      pendingVideoEnd=null;
+      advanceLesson();
+      return;
+    }
+    if(Date.now()-pendingVideoEnd.at>30000){
+      pendingVideoEnd=null;
+      notify('Video tugadi, lekin sayt ko‘rilganini hali tasdiqlamadi');
+    }
+  }
+
   window.addEventListener('offline',()=>{wasOffline=true;});
   window.addEventListener('online',()=>{
     if(!wasOffline)return;
@@ -204,7 +224,7 @@
   window.__AIS_ANDROID={configure(o){Object.assign(conf,o||{});for(const v of document.querySelectorAll('video'))setSpeed(v);}};
   setInterval(()=>{
     // Background sessions remain enabled; Android may still suspend them under memory pressure.
-    watchVideos();quiz();
+    watchVideos();confirmEndedVideo();startTestIfPresent();quiz();
   },1300);
   watchVideos();
 

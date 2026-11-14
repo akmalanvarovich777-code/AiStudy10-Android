@@ -35,7 +35,6 @@ public final class MainActivity extends Activity {
     private final GeckoView[] views=new GeckoView[10];
     private final String[] statuses=new String[10];
     private final Button[] profileButtons=new Button[10];
-    private Button solveButton;
     private GeckoRuntime runtime;
     private LinearLayout shell, toolbar, hiddenHost;
     private FrameLayout content;
@@ -105,9 +104,10 @@ public final class MainActivity extends Activity {
     private JSONObject getConfiguration(){
         JSONObject j=new JSONObject();
         try{
-            j.put("rate",options.getFloat("rate",2f));
+            j.put("rate",options.getFloat("rate",3f));
             j.put("autoplay",options.getBoolean("autoplay",true));
             j.put("autoNext",options.getBoolean("autoNext",true));
+            j.put("autoStartTest",options.getBoolean("autoStartTest",true));
             j.put("quizAssist",options.getBoolean("quizAssist",false));
             j.put("guessMissing",options.getBoolean("guessMissing",false));
             j.put("autoSubmit",options.getBoolean("autoSubmit",false));
@@ -125,20 +125,11 @@ public final class MainActivity extends Activity {
         LinearLayout navRow=row();navRow.setPadding(dp(4),0,dp(4),0);
         Button mode=button("1 / 10 panel");navRow.addView(mode,tabparams());
         mode.setOnClickListener(v->{tenPanel=!tenPanel;mode.setText(tenPanel?"10 panel":"1 panel");renderPanels();});
-        Button speed=button(speedLabel(options.getFloat("rate",2f)));navRow.addView(speed,tabparams());speed.setOnClickListener(v->{
-            final String[] choices={"1×","1.25×","1.5×","2×","3×","4×","5×"};
-            final float[] values={1f,1.25f,1.5f,2f,3f,4f,5f};
-            int checked=0;float current=options.getFloat("rate",2f);
-            for(int i=0;i<values.length;i++)if(Math.abs(values[i]-current)<0.01f)checked=i;
-            new AlertDialog.Builder(this).setTitle("Video tezligi").setSingleChoiceItems(choices,checked,(d,which)->{
-                options.edit().putFloat("rate",values[which]).apply();speed.setText(choices[which]);d.dismiss();
+        Button speed=button("3×");navRow.addView(speed,tabparams());speed.setOnClickListener(v->{
+            final String[] choices={"1×","1.5×","2×","3×","4×","5×"};
+            new AlertDialog.Builder(this).setTitle("Video tezligi").setSingleChoiceItems(choices,-1,(d,which)->{
+                float[] values={1,1.5f,2,3,4,5};options.edit().putFloat("rate",values[which]).apply();speed.setText(choices[which]);d.dismiss();
             }).show();
-        });
-        solveButton=button("✓ Testni ishlash");navRow.addView(solveButton,tabparams());updateSolveButton();solveButton.setOnClickListener(v->{
-            boolean enabled=!options.getBoolean("quizAssist",false);
-            options.edit().putBoolean("quizAssist",enabled).putBoolean("guessMissing",false).putBoolean("autoSubmit",false).apply();
-            updateSolveButton();
-            Toast.makeText(this,enabled?"Test yordamchisi yoqildi: bazadagi aniq javoblar tanlanadi, topilmaganlari sizga qoldiriladi":"Test yordamchisi o‘chirildi",Toast.LENGTH_LONG).show();
         });
         Button help=button("⚙ Avto sozlamalar");navRow.addView(help,tabparams());help.setOnClickListener(v->showOptions());
         Button reload=button("↻ Yangilash");navRow.addView(reload,tabparams());reload.setOnClickListener(v->sessions[selected].reload());
@@ -152,10 +143,6 @@ public final class MainActivity extends Activity {
         content=new FrameLayout(this);shell.addView(content,new LinearLayout.LayoutParams(-1,0,1));updateProfileButtons();
         TextView author=label("Muallif: Akmal Muxamedjanov · Mustaqil yordamchi dastur",11,Color.rgb(174,191,213));
         author.setGravity(Gravity.CENTER);shell.addView(author,wrap());
-    }
-    private String speedLabel(float rate){return (rate==(int)rate?Integer.toString((int)rate):Float.toString(rate))+"×";}
-    private void updateSolveButton(){
-        if(solveButton!=null){boolean enabled=options.getBoolean("quizAssist",false);solveButton.setText(enabled?"✓ Testni ishlash: yoqildi":"✓ Testni ishlash");solveButton.setBackgroundTintList(android.content.res.ColorStateList.valueOf(enabled?BLUE:PANEL));}
     }
     private void updateProfileButtons(){
         for(int i=0;i<10;i++){
@@ -202,15 +189,15 @@ public final class MainActivity extends Activity {
         .setMessage("1. Har bir profilni tanlab omp.aistudy.uz hisobiga kiring.\n2. '10 panel' barcha sessiyalarni ko‘rsatadi; '1 panel' tanlanganini kattalashtiradi.\n3. Tezlikni tanlang, avto video va keyingi darsni ⚙ da boshqaring.\n4. Test yordamchisini faqat o‘zingiz ruxsat bergan testlarda yoqing.\n5. Fon rejimi telefon ekran o‘chganida 10 ta video ishlashini kafolatlamaydi.\n6. Tarmoq/CORS server xatolarini dastur tuzata olmaydi.\n\nMuallif: Akmal Muxamedjanov")
         .setPositiveButton("Tushunarli",(d,w)->{}).show();}
     private void showOptions(){
-        String[] labels={"Avto ▶ video", "Keyingi dars", "Test yordamchisi", "Topilmasa taxmin", "Testni yuborish", "Avto modul/kurs", "Ko‘rilmagan darsni qayta ko‘rish"};
-        String[] keys={"autoplay","autoNext","quizAssist","guessMissing","autoSubmit","autoCourse","replayMissing"};
+        String[] labels={"Avto ▶ video", "✓ tasdiqlansa keyingi dars", "Test bo‘limida ‘Testni boshlash’ni bosish", "Test yordamchisi", "Topilmasa taxmin", "Testni yuborish", "Avto modul/kurs", "Ko‘rilmagan darsni qayta ko‘rish"};
+        String[] keys={"autoplay","autoNext","autoStartTest","quizAssist","guessMissing","autoSubmit","autoCourse","replayMissing"};
         boolean[] state=new boolean[keys.length];
-        for(int i=0;i<keys.length;i++)state[i]=options.getBoolean(keys[i],i<2||i>=5);
+        for(int i=0;i<keys.length;i++)state[i]=options.getBoolean(keys[i],i<3||i>=6);
         new AlertDialog.Builder(this).setTitle("Avto sozlamalar")
             .setMultiChoiceItems(labels,state,(d,n,b)->state[n]=b)
             .setPositiveButton("Saqlash",(d,w)->{
-                SharedPreferences.Editor ed=options.edit();for(int i=0;i<keys.length;i++)ed.putBoolean(keys[i],state[i]);ed.apply();updateSolveButton();
-                if(state[4]||state[3])Toast.makeText(this,"Taxminiy javoblar xato bo‘lishi mumkin",Toast.LENGTH_LONG).show();
+                SharedPreferences.Editor ed=options.edit();for(int i=0;i<keys.length;i++)ed.putBoolean(keys[i],state[i]);ed.apply();
+                if(state[4]||state[5])Toast.makeText(this,"Taxminiy javoblar xato bo‘lishi mumkin",Toast.LENGTH_LONG).show();
             }).setNegativeButton("Bekor qilish",(d,w)->{}).show();
     }
     private boolean runningService=false;
