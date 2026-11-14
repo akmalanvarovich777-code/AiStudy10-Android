@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <application
+        android:label="AiStudy10"
+        android:icon="@drawable/ic_aistudy"
+        android:theme="@style/Theme.AiStudy"
+        android:allowBackup="false"
+        android:usesCleartextTraffic="false"
+        android:hardwareAccelerated="true">
+        <meta-data android:name="app.author" android:value="Akmal Muxamedjanov" />
+        <activity android:name=".MainActivity" android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".Profile01Activity" android:process=":profile01" android:exported="false" android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".Profile02Activity" android:process=":profile02" android:exported="false" android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".Profile03Activity" android:process=":profile03" android:exported="false" android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".Profile04Activity" android:process=":profile04" android:exported="false" android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".Profile05Activity" android:process=":profile05" android:exported="false" android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".Profile06Activity" android:process=":profile06" android:exported="false" android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".Profile07Activity" android:process=":profile07" android:exported="false" android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".Profile08Activity" android:process=":profile08" android:exported="false" android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".Profile09Activity" android:process=":profile09" android:exported="false" android:configChanges="orientation|screenSize|keyboardHidden" />
+        <activity android:name=".Profile10Activity" android:process=":profile10" android:exported="false" android:configChanges="orientation|screenSize|keyboardHidden" />
+    </application>
+</manifest>
