@@ -1,0 +1,28 @@
+{
+  "manifest_version": 2,
+  "name": "AiStudy10 v2.18 Android Companion",
+  "version": "2.18.2",
+  "description": "AiStudy10 Android dasturida dars jarayonini boshqarish",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "aistudy10-companion@akmal.local"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://omp.aistudy.uz/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_idle"
+    }
+  ],
+  "permissions": [
+    "nativeMessaging",
+    "nativeMessagingFromContent",
+    "geckoViewAddons",
+    "https://omp.aistudy.uz/*"
+  ]
+}
