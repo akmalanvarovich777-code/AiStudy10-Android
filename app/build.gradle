@@ -2,7 +2,7 @@ plugins { id 'com.android.application' }
 
 android {
     namespace 'uz.akmal.aistudy10'
-    compileSdk 35
+    compileSdk 37
     defaultConfig {
         applicationId 'uz.akmal.aistudy10'
         minSdk 28
