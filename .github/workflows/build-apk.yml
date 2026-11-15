@@ -22,7 +22,7 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - name: Install Android SDK 35 without obsolete tools package
+      - name: Install Android SDK 37 without obsolete tools package
         shell: bash
         run: |
           set -e
@@ -37,11 +37,11 @@ jobs:
           test -n "$SDKMANAGER"
           echo "SDK path: $SDK_ROOT"
           yes | "$SDKMANAGER" --licenses >/dev/null || true
-          "$SDKMANAGER" "platforms;android-35" "build-tools;35.0.0"
-      - name: Gradle 8.9
+          "$SDKMANAGER" "platforms;android-37" "build-tools;36.0.0"
+      - name: Gradle 9.3.1
         uses: gradle/actions/setup-gradle@v4
         with:
-          gradle-version: '8.9'
+          gradle-version: '9.3.1'
       - name: Check JS companion
         run: node --check app/src/main/assets/aistudy/content.js
       - name: Build Android APK
