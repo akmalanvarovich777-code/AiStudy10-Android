@@ -1,10 +1,2 @@
-<resources>
-    <style name="Theme.AiStudy" parent="android:style/Theme.Material.Light.NoActionBar">
-        <item name="android:fontFamily">sans</item>
-        <item name="android:colorAccent">#2262E3</item>
-        <item name="android:statusBarColor">#0D1730</item>
-        <item name="android:navigationBarColor">#0D1730</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowActionModeOverlay">true</item>
-    </style>
-</resources>
+<?xml version="1.0" encoding="utf-8"?>
+<resources><style name="AiStudyTheme" parent="android:style/Theme.Material.Light.NoActionBar"><item name="android:colorAccent">#2368DC</item><item name="android:windowLightStatusBar">false</item><item name="android:statusBarColor">#0C1629</item><item name="android:navigationBarColor">#0C1629</item><item name="android:windowBackground">#0C1629</item></style></resources>
