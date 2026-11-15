@@ -18,5 +18,5 @@ android {
     packaging { resources { excludes += ['META-INF/LICENSE*','META-INF/NOTICE*'] } }
 }
 dependencies {
-    implementation 'org.mozilla.geckoview:geckoview:156.0.20260921121718'
+    implementation 'org.mozilla.geckoview:geckoview:152.0.20260713164047'
 }
